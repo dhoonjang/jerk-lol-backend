@@ -1,7 +1,7 @@
 import express from 'express';
 import router from './api';
 
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 8080;
 const app = express();
 
 app.use('/api', router);
