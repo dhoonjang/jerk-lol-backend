@@ -6,13 +6,16 @@ WORKDIR /usr/src/app
 # 앱 의존성 설치
 # 가능한 경우(npm@5+) package.json과 package-lock.json을 모두 복사하기 위해
 # 와일드카드를 사용
-COPY package.json yarn.lock .npmrc ./
 
-RUN --mount=type=ssh --mount=type=secret,id=npmrc,dst=$HOME/.npmrc \
-  yarn install
+ARG NPM_TOKEN  
+COPY .npmrc .npmrc
+
+COPY package.json yarn.lock ./
+
+RUN yarn install
 # 프로덕션을 위한 코드를 빌드하는 경우
 # RUN npm ci --only=production
-
+RUN rm -f .npmrc
 # 앱 소스 추가
 COPY . .
 
