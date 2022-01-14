@@ -1,0 +1,22 @@
+{
+  "extends": [
+    "config:base"
+  ],
+  "ignorePresets": [":prHourlyLimit2"],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true
+    }
+  ],
+  "hostRules": [
+    {
+      "matchHost": "https://npm.pkg.github.com/",
+      "hostType": "npm",
+      "encrypted": {
+        "token": "wcFMA/xDdHCJBTolAQ//bCpNRr1UeKkByV10pA0DBVS2pnw6wdnC1z6qK8RLr9qH6D9j2DCdbwrn7BTpG8zHogm/NnepNoE45/eocslEMTVrrQKucVuNT5RkMn4al4aRIImkhaNFyOq3zNhnKRtDMR/6t6uoQDzugez6s7YHyYm49+F3ex1EIyPjDs6XAuMyDLCueusbTT2mORrWWOZe369xLoPhSYhVB98HuintkzHY8802B4T7b6bcjPLiog2+Xe/SdhDkSGpRtMgFSz1scQODeAxBksrMdmHMzOL6VQmyQsOVprrBXYcekB977vKezm5mFs1KPdZy0Qsg9kY4Za3E+2ISDciTy+eWwOQUXplYypAdmlrPlqLSmFZFlv+dhg58lajQ48v2NWHofu+AeMG8eCVSDJM0HeIrtKs3lC2FMbKmb6m/XxYzRVa5+Xx6HDkj7v/49dEY8xKEBUC0/jPPwnqY7+WPkeQ54IV2Dqgtxdey+6j1mqtppF/crtF9oPAgRuiwXFNko5Qq0r8JqpWz4aocMUUPZoGGuo2m7nZefaU9MuPx7G+eC4GJCGQM9obpoRauqyIGdaL2PNpnmfoyN7HxFJlQzYNj9A5fHHhApUV+tvGQGTBDOI6qdOB3VBKklDQRvYSrptTSTG5ZVvDmkcZtMR264VcF9KhI9qP4XWpsvd+ufCuoUClAbt3SeQHDkWZXtV1AaH6J/+u9cqR5aUlA4TpFKai1AzWxV/V3OmHI8f+eIMHhQRsXc0HXuA7XkbHUzOVcSkKGOby8gqsbUv4dQOGAsAMKhmIuTqEY4Gk1emMW6aH7RfhNLPUl+gapxq/adRYIKaK/jQ8Wqhd4qeJSRK/nOWY"
+      }
+    }
+  ],
+  "npmrc": "@scatterlab:registry=https://npm.pkg.github.com/"
+}
