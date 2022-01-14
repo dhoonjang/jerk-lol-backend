@@ -1,6 +1,6 @@
 module.exports = {
-  preset: "ts-jest",
-  testMatch: ["**/*.test.ts"],
+  preset: 'ts-jest',
+  testMatch: ['**/*.test.ts'],
   coverageThreshold: {
     global: {
       statements: 70,
