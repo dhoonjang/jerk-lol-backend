@@ -163,7 +163,12 @@ export class GoogleService {
           const index = values.findIndex((f) => f[0] === name);
 
           if (index >= 0) {
-            values[index].push(`${type}: ${reason}`);
+            values[index].push(
+              `[${new Date(+new Date() + 3240 * 10000)
+                .toISOString()
+                .replace('T', ' ')
+                .replace(/\..*/, '')}] <${type}>\n${reason}`
+            );
           }
 
           this.sheetClient?.spreadsheets.values
