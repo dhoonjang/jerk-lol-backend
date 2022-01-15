@@ -111,7 +111,7 @@ export class GoogleService {
     });
   }
 
-  async updatePeople(req: IPeopleRequest): Promise<boolean> {
+  async updatePeople(req: IPeopleRequest): Promise<number> {
     const { name, type } = req;
     return new Promise((resolve) => {
       this.sheetClient?.spreadsheets.values
@@ -125,21 +125,27 @@ export class GoogleService {
           const index = values?.findIndex((f) => f[1] === name);
 
           if (index !== undefined && index >= 0 && values) {
-            values[index][6] = String(
-              Number(values[index][6]) + (type === 'up' ? 0.4 : -0.4)
-            );
-          }
+            let newTier = Number(values[index][6]);
 
-          this.sheetClient?.spreadsheets.values
-            .update({
-              spreadsheetId,
-              range: 'people!A2:G',
-              valueInputOption: 'RAW',
-              requestBody: {
-                values,
-              },
-            })
-            .then(() => resolve(true));
+            if (type === 'down') {
+              newTier -= 0.4;
+            } else {
+              newTier += 0.4;
+            }
+
+            values[index][6] = String(newTier);
+
+            this.sheetClient?.spreadsheets.values
+              .update({
+                spreadsheetId,
+                range: 'people!A2:G',
+                valueInputOption: 'RAW',
+                requestBody: {
+                  values,
+                },
+              })
+              .then(() => resolve(newTier));
+          }
         });
     });
   }

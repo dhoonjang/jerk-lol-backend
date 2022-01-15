@@ -17,12 +17,12 @@ router.post('/people', async (req, res) => {
   const service = new GoogleService();
   await service.authorize();
 
-  const success = await service.updatePeople(req.body);
+  const tier = await service.updatePeople(req.body);
 
   await service.logPeople(req.body);
 
   res.json({
-    success,
+    tier,
   });
 });
 
