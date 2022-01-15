@@ -14,11 +14,12 @@ router.get('/people', async (req, res) => {
 });
 
 router.post('/people', async (req, res) => {
-  const { lolName, type }: { lolName: string; type: 'up' | 'down' } = req.body;
   const service = new GoogleService();
   await service.authorize();
 
-  const success = await service.updatePeople(lolName, type);
+  const success = await service.updatePeople(req.body);
+
+  await service.logPeople(req.body);
 
   res.json({
     success,

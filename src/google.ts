@@ -2,20 +2,12 @@ import { Credentials, OAuth2Client } from 'google-auth-library';
 import fs from 'fs';
 import * as readline from 'readline';
 import { google, sheets_v4 } from 'googleapis';
+import { IPeople, IPeopleRequest } from './types';
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const TOKEN_PATH = 'token.json';
 
 export const spreadsheetId = '1E4VYzkod6F2h6PGOmeOC0FrRtu1CKQm1ZcfzkKOD-b0';
-
-export interface IPeople {
-  name: string;
-  discordId: string;
-  lolName: string;
-  position: string;
-  subPosition: string;
-  tier: number;
-}
 
 export class GoogleService {
   private oAuth2Client?: OAuth2Client;
@@ -102,7 +94,7 @@ export class GoogleService {
       this.sheetClient?.spreadsheets.values
         .get({
           spreadsheetId,
-          range: 'A2:G',
+          range: 'people!A2:G',
         })
         .then((res) => {
           resolve(
@@ -119,28 +111,65 @@ export class GoogleService {
     });
   }
 
-  async updatePeople(lolName: string, type: 'up' | 'down'): Promise<boolean> {
+  async updatePeople(req: IPeopleRequest): Promise<boolean> {
+    const { name, type } = req;
     return new Promise((resolve) => {
       this.sheetClient?.spreadsheets.values
         .get({
           spreadsheetId,
-          range: 'A2:G',
+          range: 'people!A2:G',
         })
         .then((res) => {
           const { values } = res.data;
 
-          const index = values?.findIndex((f) => f[3] === lolName);
+          const index = values?.findIndex((f) => f[1] === name);
 
           if (index !== undefined && index >= 0 && values) {
             values[index][6] = String(
-              Number(values[index][6]) + (type === 'up' ? 0.5 : -0.5)
+              Number(values[index][6]) + (type === 'up' ? 0.4 : -0.4)
             );
           }
 
           this.sheetClient?.spreadsheets.values
             .update({
               spreadsheetId,
-              range: 'A2:G',
+              range: 'people!A2:G',
+              valueInputOption: 'RAW',
+              requestBody: {
+                values,
+              },
+            })
+            .then(() => resolve(true));
+        });
+    });
+  }
+
+  async logPeople(req: IPeopleRequest): Promise<boolean> {
+    const { name, type, reason } = req;
+
+    return new Promise((resolve) => {
+      this.sheetClient?.spreadsheets.values
+        .get({
+          spreadsheetId,
+          range: 'log!A1:Z',
+          majorDimension: 'ROWS',
+        })
+        .then((res) => {
+          const { values } = res.data;
+          if (!values) {
+            resolve(false);
+            return;
+          }
+          const index = values.findIndex((f) => f[0] === name);
+
+          if (index >= 0) {
+            values[index].push(`${type}: ${reason}`);
+          }
+
+          this.sheetClient?.spreadsheets.values
+            .update({
+              spreadsheetId,
+              range: 'log!A1:Z',
               valueInputOption: 'RAW',
               requestBody: {
                 values,

@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 # 와일드카드를 사용
 
 ARG NPM_TOKEN  
-COPY .npmrc .npmrc
+COPY .npmrc.local .npmrc
 
 COPY package.json yarn.lock ./
 
